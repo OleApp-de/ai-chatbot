@@ -45,7 +45,7 @@ export function SidebarUserNav({ user }: { user: User }) {
                 width={24}
               />
               <span className="truncate" data-testid="user-email">
-                {user?.name || user?.email || "Demo User"}
+                {user?.name || user?.email || "Demo-Benutzer"}
               </span>
               <ChevronUp className="ml-auto" />
             </SidebarMenuButton>
@@ -62,7 +62,7 @@ export function SidebarUserNav({ user }: { user: User }) {
                 setTheme(resolvedTheme === "dark" ? "light" : "dark")
               }
             >
-              {`Toggle ${resolvedTheme === "light" ? "dark" : "light"} mode`}
+              {resolvedTheme === "light" ? "Dunkelmodus aktivieren" : "Hellmodus aktivieren"}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild data-testid="user-nav-item-auth">
@@ -71,12 +71,12 @@ export function SidebarUserNav({ user }: { user: User }) {
                 onClick={() => {
                   toast({
                     type: "info",
-                    description: "Auth disabled in UI development mode",
+                    description: "Authentifizierung im UI-Entwicklungsmodus deaktiviert",
                   });
                 }}
                 type="button"
               >
-                Sign out (Demo)
+                Abmelden (Demo)
               </button>
             </DropdownMenuItem>
           </DropdownMenuContent>

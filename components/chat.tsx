@@ -253,15 +253,13 @@ export function Chat({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Activate AI Gateway</AlertDialogTitle>
+            <AlertDialogTitle>AI Gateway aktivieren</AlertDialogTitle>
             <AlertDialogDescription>
-              This application requires{" "}
-              {process.env.NODE_ENV === "production" ? "the owner" : "you"} to
-              activate Vercel AI Gateway.
+              Diese Anwendung erfordert die Aktivierung des Vercel AI Gateways.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 window.open(
@@ -271,7 +269,7 @@ export function Chat({
                 window.location.href = "/";
               }}
             >
-              Activate
+              Aktivieren
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -46,15 +46,15 @@ export function AppSidebar({ user }: { user: User | undefined }) {
     });
 
     toast.promise(deletePromise, {
-      loading: "Deleting all chats...",
+      loading: "Alle Chats werden gelöscht...",
       success: () => {
         mutate(unstable_serialize(getChatHistoryPaginationKey));
         setShowDeleteAllDialog(false);
         router.replace("/");
         router.refresh();
-        return "All chats deleted successfully";
+        return "Alle Chats erfolgreich gelöscht";
       },
-      error: "Failed to delete all chats",
+      error: "Chats konnten nicht gelöscht werden",
     });
   };
 
@@ -94,7 +94,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent align="end" className="hidden md:block">
-                      Delete All Chats
+                      Alle Chats löschen
                     </TooltipContent>
                   </Tooltip>
                 )}
@@ -114,7 +114,7 @@ export function AppSidebar({ user }: { user: User | undefined }) {
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent align="end" className="hidden md:block">
-                    New Chat
+                    Neuer Chat
                   </TooltipContent>
                 </Tooltip>
               </div>
@@ -133,16 +133,16 @@ export function AppSidebar({ user }: { user: User | undefined }) {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete all chats?</AlertDialogTitle>
+            <AlertDialogTitle>Alle Chats löschen?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete all
-              your chats and remove them from our servers.
+              Diese Aktion kann nicht rückgängig gemacht werden. Alle Ihre
+              Chats werden dauerhaft gelöscht.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteAll}>
-              Delete All
+              Alle löschen
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

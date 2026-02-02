@@ -7,8 +7,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
-import { AssistantSelector } from "@/components/assistant-selector";
 import { PlusIcon, TrashIcon } from "@/components/icons";
+import { SidebarAssistants } from "@/components/sidebar-assistants";
 import {
   getChatHistoryPaginationKey,
   SidebarHistory,
@@ -21,6 +21,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarMenu,
+  SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
 import {
@@ -70,15 +71,22 @@ export function AppSidebar({
       <Sidebar className="group-data-[side=left]:border-r-0">
         <SidebarHeader>
           <SidebarMenu>
-            {/* Assistant Selector */}
-            <AssistantSelector selectedAssistantId={selectedAssistantId} />
-            
-            {/* Actions Row */}
-            <div className="mt-2 flex flex-row items-center justify-between px-2">
+            {/* Logo and New Chat */}
+            <div className="flex flex-row items-center justify-between px-2 py-1">
+              <Link
+                className="flex items-center gap-2"
+                href="/"
+                onClick={() => setOpenMobile(false)}
+              >
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent">
+                  <span className="font-bold text-sm text-accent-foreground">KI</span>
+                </div>
+                <span className="font-bold text-lg">KI-Plattform</span>
+              </Link>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    className="flex-1 justify-start gap-2"
+                    className="h-8 w-8 p-0"
                     onClick={() => {
                       setOpenMobile(false);
                       router.push("/");
@@ -89,18 +97,33 @@ export function AppSidebar({
                     variant="ghost"
                   >
                     <PlusIcon />
-                    <span>Neuer Chat</span>
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent align="start" className="hidden md:block">
+                <TooltipContent align="end" className="hidden md:block">
                   Neuer Chat
                 </TooltipContent>
               </Tooltip>
-              {user && (
+            </div>
+          </SidebarMenu>
+        </SidebarHeader>
+        <SidebarContent>
+          {/* Assistenten-Liste */}
+          <SidebarAssistants selectedAssistantId={selectedAssistantId} />
+          
+          <SidebarSeparator />
+          
+          {/* Chat History */}
+          <SidebarHistory user={user} />
+        </SidebarContent>
+        <SidebarFooter>
+          {user && (
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between px-2">
+                <span className="text-xs text-muted-foreground">Chatverlauf</span>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
-                      className="h-8 w-8 p-0"
+                      className="h-6 w-6 p-0"
                       onClick={() => setShowDeleteAllDialog(true)}
                       size="sm"
                       type="button"
@@ -113,14 +136,11 @@ export function AppSidebar({
                     Alle Chats löschen
                   </TooltipContent>
                 </Tooltip>
-              )}
+              </div>
+              <SidebarUserNav user={user} />
             </div>
-          </SidebarMenu>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarHistory user={user} />
-        </SidebarContent>
-        <SidebarFooter>{user && <SidebarUserNav user={user} />}</SidebarFooter>
+          )}
+        </SidebarFooter>
       </Sidebar>
 
       <AlertDialog

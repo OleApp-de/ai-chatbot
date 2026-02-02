@@ -13,10 +13,12 @@ function PureChatHeader({
   chatId,
   selectedVisibilityType,
   isReadonly,
+  selectedModelId,
 }: {
-  chatId: string;
-  selectedVisibilityType: VisibilityType;
-  isReadonly: boolean;
+  chatId?: string;
+  selectedVisibilityType?: VisibilityType;
+  isReadonly?: boolean;
+  selectedModelId?: string;
 }) {
   const router = useRouter();
   const { open } = useSidebar();
@@ -41,7 +43,7 @@ function PureChatHeader({
         </Button>
       )}
 
-      {!isReadonly && (
+      {!isReadonly && chatId && selectedVisibilityType && (
         <VisibilitySelector
           chatId={chatId}
           className="order-1 md:order-2"

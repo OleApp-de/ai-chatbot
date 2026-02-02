@@ -79,7 +79,7 @@ export default function AssistantsPage() {
       
       {/* Main Content */}
       <main className="flex-1 overflow-auto">
-        <div className="mx-auto w-full max-w-4xl px-4 py-8">
+        <div className="mx-auto w-full max-w-5xl px-4 py-8 md:px-6 lg:px-8">
           {/* Title */}
           <motion.div
             animate={{ opacity: 1, y: 0 }}

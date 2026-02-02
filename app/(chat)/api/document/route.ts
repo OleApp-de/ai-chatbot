@@ -1,11 +1,8 @@
-import { auth } from "@/app/(auth)/auth";
 import type { ArtifactKind } from "@/components/artifact";
-import {
-  deleteDocumentsByIdAfterTimestamp,
-  getDocumentsById,
-  saveDocument,
-} from "@/lib/db/queries";
 import { ChatSDKError } from "@/lib/errors";
+
+// In-memory storage for UI development
+const mockDocuments = new Map<string, { id: string; content: string; title: string; kind: ArtifactKind; createdAt: Date }[]>();
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -18,22 +15,10 @@ export async function GET(request: Request) {
     ).toResponse();
   }
 
-  const session = await auth();
-
-  if (!session?.user) {
-    return new ChatSDKError("unauthorized:document").toResponse();
-  }
-
-  const documents = await getDocumentsById({ id });
-
-  const [document] = documents;
-
-  if (!document) {
+  const documents = mockDocuments.get(id) || [];
+  
+  if (documents.length === 0) {
     return new ChatSDKError("not_found:document").toResponse();
-  }
-
-  if (document.userId !== session.user.id) {
-    return new ChatSDKError("forbidden:document").toResponse();
   }
 
   return Response.json(documents, { status: 200 });
@@ -50,12 +35,6 @@ export async function POST(request: Request) {
     ).toResponse();
   }
 
-  const session = await auth();
-
-  if (!session?.user) {
-    return new ChatSDKError("not_found:document").toResponse();
-  }
-
   const {
     content,
     title,
@@ -63,23 +42,17 @@ export async function POST(request: Request) {
   }: { content: string; title: string; kind: ArtifactKind } =
     await request.json();
 
-  const documents = await getDocumentsById({ id });
-
-  if (documents.length > 0) {
-    const [doc] = documents;
-
-    if (doc.userId !== session.user.id) {
-      return new ChatSDKError("forbidden:document").toResponse();
-    }
-  }
-
-  const document = await saveDocument({
+  const document = {
     id,
     content,
     title,
     kind,
-    userId: session.user.id,
-  });
+    createdAt: new Date(),
+  };
+
+  const existing = mockDocuments.get(id) || [];
+  existing.push(document);
+  mockDocuments.set(id, existing);
 
   return Response.json(document, { status: 200 });
 }
@@ -87,7 +60,6 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
-  const timestamp = searchParams.get("timestamp");
 
   if (!id) {
     return new ChatSDKError(
@@ -96,31 +68,6 @@ export async function DELETE(request: Request) {
     ).toResponse();
   }
 
-  if (!timestamp) {
-    return new ChatSDKError(
-      "bad_request:api",
-      "Parameter timestamp is required."
-    ).toResponse();
-  }
-
-  const session = await auth();
-
-  if (!session?.user) {
-    return new ChatSDKError("unauthorized:document").toResponse();
-  }
-
-  const documents = await getDocumentsById({ id });
-
-  const [document] = documents;
-
-  if (document.userId !== session.user.id) {
-    return new ChatSDKError("forbidden:document").toResponse();
-  }
-
-  const documentsDeleted = await deleteDocumentsByIdAfterTimestamp({
-    id,
-    timestamp: new Date(timestamp),
-  });
-
-  return Response.json(documentsDeleted, { status: 200 });
+  mockDocuments.delete(id);
+  return Response.json({ success: true }, { status: 200 });
 }

@@ -1,8 +1,5 @@
-import { put } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { z } from "zod";
-
-import { auth } from "@/app/(auth)/auth";
 
 // Use Blob instead of File since File is not available in Node.js environment
 const FileSchema = z.object({
@@ -18,11 +15,7 @@ const FileSchema = z.object({
 });
 
 export async function POST(request: Request) {
-  const session = await auth();
-
-  if (!session) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  // UI Development Mode: Skip auth check
 
   if (request.body === null) {
     return new Response("Request body is empty", { status: 400 });
@@ -48,17 +41,14 @@ export async function POST(request: Request) {
 
     // Get filename from formData since Blob doesn't have name property
     const filename = (formData.get("file") as File).name;
-    const fileBuffer = await file.arrayBuffer();
 
-    try {
-      const data = await put(`${filename}`, fileBuffer, {
-        access: "public",
-      });
-
-      return NextResponse.json(data);
-    } catch (_error) {
-      return NextResponse.json({ error: "Upload failed" }, { status: 500 });
-    }
+    // UI Development Mode: Return mock blob URL
+    return NextResponse.json({
+      url: `data:${file.type};base64,mock-${filename}`,
+      pathname: filename,
+      contentType: file.type,
+      contentDisposition: `attachment; filename="${filename}"`,
+    });
   } catch (_error) {
     return NextResponse.json(
       { error: "Failed to process request" },

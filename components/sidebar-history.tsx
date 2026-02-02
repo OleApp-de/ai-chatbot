@@ -23,27 +23,35 @@ import {
   SidebarMenu,
   useSidebar,
 } from "@/components/ui/sidebar";
-import type { Chat } from "@/lib/db/schema";
+// Extended Chat type with assistantId for history display
+interface ChatWithAssistant {
+  id: string;
+  title: string;
+  createdAt: Date | string;
+  userId: string;
+  visibility: "public" | "private";
+  assistantId?: string;
+}
 import { fetcher } from "@/lib/utils";
 import { LoaderIcon } from "./icons";
 import { ChatItem } from "./sidebar-history-item";
 
 type GroupedChats = {
-  today: Chat[];
-  yesterday: Chat[];
-  lastWeek: Chat[];
-  lastMonth: Chat[];
-  older: Chat[];
+  today: ChatWithAssistant[];
+  yesterday: ChatWithAssistant[];
+  lastWeek: ChatWithAssistant[];
+  lastMonth: ChatWithAssistant[];
+  older: ChatWithAssistant[];
 };
 
 export type ChatHistory = {
-  chats: Chat[];
+  chats: ChatWithAssistant[];
   hasMore: boolean;
 };
 
 const PAGE_SIZE = 20;
 
-const groupChatsByDate = (chats: Chat[]): GroupedChats => {
+const groupChatsByDate = (chats: ChatWithAssistant[]): GroupedChats => {
   const now = new Date();
   const oneWeekAgo = subWeeks(now, 1);
   const oneMonthAgo = subMonths(now, 1);

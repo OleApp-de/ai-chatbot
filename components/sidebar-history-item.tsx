@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { memo } from "react";
 import { useChatVisibility } from "@/hooks/use-chat-visibility";
-import type { Chat } from "@/lib/db/schema";
+import { getAssistantById } from "@/lib/assistants";
+import { cn } from "@/lib/utils";
 import {
   CheckCircleFillIcon,
   GlobeIcon,
@@ -26,13 +27,23 @@ import {
   SidebarMenuItem,
 } from "./ui/sidebar";
 
+// Extended Chat type with assistantId
+interface ChatWithAssistant {
+  id: string;
+  title: string;
+  createdAt: Date | string;
+  userId: string;
+  visibility: "public" | "private";
+  assistantId?: string;
+}
+
 const PureChatItem = ({
   chat,
   isActive,
   onDelete,
   setOpenMobile,
 }: {
-  chat: Chat;
+  chat: ChatWithAssistant;
   isActive: boolean;
   onDelete: (chatId: string) => void;
   setOpenMobile: (open: boolean) => void;
@@ -42,11 +53,23 @@ const PureChatItem = ({
     initialVisibilityType: chat.visibility,
   });
 
+  const assistant = chat.assistantId ? getAssistantById(chat.assistantId) : null;
+
   return (
     <SidebarMenuItem>
       <SidebarMenuButton asChild isActive={isActive}>
-        <Link href={`/chat/${chat.id}`} onClick={() => setOpenMobile(false)}>
-          <span>{chat.title}</span>
+        <Link className="flex items-center gap-2" href={`/chat/${chat.id}`} onClick={() => setOpenMobile(false)}>
+          {assistant && (
+            <div
+              className={cn(
+                "flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold text-white",
+                assistant.avatarColor || "bg-accent"
+              )}
+            >
+              {assistant.avatar}
+            </div>
+          )}
+          <span className="truncate">{chat.title}</span>
         </Link>
       </SidebarMenuButton>
 

@@ -1,9 +1,10 @@
 "use client";
 
-import { BotIcon, MoreHorizontalIcon, SearchIcon } from "lucide-react";
+import { PlusIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { assistants, type Assistant } from "@/lib/assistants";
+import { useEffect, useState } from "react";
+import { assistants, getAssistantById, type Assistant } from "@/lib/assistants";
 import { cn } from "@/lib/utils";
 import {
   SidebarGroup,
@@ -19,9 +20,32 @@ interface SidebarAssistantsProps {
   selectedAssistantId: string;
 }
 
+// Helper to get favorites from cookie
+function getFavoritesFromCookie(): string[] {
+  if (typeof document === "undefined") return ["general"];
+  const match = document.cookie.match(/favorite-assistants=([^;]+)/);
+  if (match) {
+    try {
+      return JSON.parse(decodeURIComponent(match[1]));
+    } catch {
+      return ["general"];
+    }
+  }
+  return ["general"]; // Default favorite
+}
+
 export function SidebarAssistants({ selectedAssistantId }: SidebarAssistantsProps) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(["general"]);
+
+  useEffect(() => {
+    setFavoriteIds(getFavoritesFromCookie());
+  }, []);
+
+  const favoriteAssistants = favoriteIds
+    .map((id) => getAssistantById(id))
+    .filter((a): a is Assistant => a !== undefined);
 
   const handleSelectAssistant = (assistant: Assistant) => {
     document.cookie = `selected-assistant=${assistant.id}; path=/; max-age=${60 * 60 * 24 * 365}`;
@@ -35,16 +59,17 @@ export function SidebarAssistants({ selectedAssistantId }: SidebarAssistantsProp
       <SidebarGroupLabel className="flex items-center justify-between">
         <span>Assistenten</span>
         <Link
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
           href="/assistants"
           onClick={() => setOpenMobile(false)}
         >
-          Alle anzeigen
+          <SearchIcon className="h-3 w-3" />
+          <span>Entdecken</span>
         </Link>
       </SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
-          {assistants.map((assistant) => (
+          {favoriteAssistants.map((assistant) => (
             <SidebarMenuItem key={assistant.id}>
               <SidebarMenuButton
                 className={cn(
@@ -74,6 +99,15 @@ export function SidebarAssistants({ selectedAssistantId }: SidebarAssistantsProp
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
+          
+          {favoriteAssistants.length === 0 && (
+            <div className="px-2 py-4 text-center text-sm text-muted-foreground">
+              Keine Favoriten.
+              <Link className="block mt-1 text-foreground hover:underline" href="/assistants">
+                Assistenten entdecken
+              </Link>
+            </div>
+          )}
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>

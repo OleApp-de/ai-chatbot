@@ -1,20 +1,43 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowLeftIcon, SearchIcon } from "lucide-react";
-import Link from "next/link";
+import { SearchIcon, StarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { ChatHeader } from "@/components/chat-header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { assistants, categories, type Assistant } from "@/lib/assistants";
 import { cn } from "@/lib/utils";
 
+// Helper to get favorites from cookie
+function getFavoritesFromCookie(): string[] {
+  if (typeof document === "undefined") return ["general"];
+  const match = document.cookie.match(/favorite-assistants=([^;]+)/);
+  if (match) {
+    try {
+      return JSON.parse(decodeURIComponent(match[1]));
+    } catch {
+      return ["general"];
+    }
+  }
+  return ["general"];
+}
+
+function saveFavoritesToCookie(favorites: string[]) {
+  document.cookie = `favorite-assistants=${encodeURIComponent(JSON.stringify(favorites))}; path=/; max-age=${60 * 60 * 24 * 365}`;
+}
+
 export default function AssistantsPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [favorites, setFavorites] = useState<string[]>(["general"]);
+
+  useEffect(() => {
+    setFavorites(getFavoritesFromCookie());
+  }, []);
 
   const filteredAssistants = assistants.filter((assistant) => {
     const matchesSearch =
@@ -28,6 +51,21 @@ export default function AssistantsPage() {
 
     return matchesSearch && matchesCategory;
   });
+
+  const toggleFavorite = (assistantId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const newFavorites = favorites.includes(assistantId)
+      ? favorites.filter((id) => id !== assistantId)
+      : [...favorites, assistantId];
+    setFavorites(newFavorites);
+    saveFavoritesToCookie(newFavorites);
+    
+    if (newFavorites.includes(assistantId)) {
+      toast.success("Zu Favoriten hinzugefugt");
+    } else {
+      toast.success("Aus Favoriten entfernt");
+    }
+  };
 
   const handleSelectAssistant = (assistant: Assistant) => {
     document.cookie = `selected-assistant=${assistant.id}; path=/; max-age=${60 * 60 * 24 * 365}`;
@@ -115,35 +153,57 @@ export default function AssistantsPage() {
             initial={{ opacity: 0 }}
             transition={{ delay: 0.3 }}
           >
-            {filteredAssistants.map((assistant, index) => (
-              <motion.button
-                animate={{ opacity: 1, y: 0 }}
-                className="group flex items-start gap-4 rounded-xl border border-border bg-card p-4 text-left transition-all hover:border-foreground/20 hover:shadow-sm"
-                initial={{ opacity: 0, y: 20 }}
-                key={assistant.id}
-                onClick={() => handleSelectAssistant(assistant)}
-                transition={{ delay: 0.05 * index }}
-                type="button"
-              >
-                <div
-                  className={cn(
-                    "flex h-14 w-14 shrink-0 items-center justify-center rounded-full font-bold text-lg text-white transition-transform group-hover:scale-105",
-                    assistant.avatarColor || "bg-accent"
-                  )}
+            {filteredAssistants.map((assistant, index) => {
+              const isFavorite = favorites.includes(assistant.id);
+              return (
+                <motion.div
+                  animate={{ opacity: 1, y: 0 }}
+                  className="group relative flex items-start gap-4 rounded-xl border border-border bg-card p-4 transition-all hover:border-foreground/20 hover:shadow-sm"
+                  initial={{ opacity: 0, y: 20 }}
+                  key={assistant.id}
+                  transition={{ delay: 0.05 * index }}
                 >
-                  {assistant.avatar}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <h3 className="font-semibold">{assistant.name}</h3>
-                  <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                    {assistant.shortDescription}
-                  </p>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    von {assistant.author}
-                  </p>
-                </div>
-              </motion.button>
-            ))}
+                  {/* Favorite Star Button */}
+                  <button
+                    className={cn(
+                      "absolute right-3 top-3 p-1 rounded-full transition-colors",
+                      isFavorite 
+                        ? "text-yellow-500 hover:text-yellow-600" 
+                        : "text-muted-foreground/50 hover:text-muted-foreground opacity-0 group-hover:opacity-100"
+                    )}
+                    onClick={(e) => toggleFavorite(assistant.id, e)}
+                    type="button"
+                  >
+                    <StarIcon className={cn("h-5 w-5", isFavorite && "fill-current")} />
+                  </button>
+                  
+                  {/* Clickable content */}
+                  <button
+                    className="flex flex-1 items-start gap-4 text-left"
+                    onClick={() => handleSelectAssistant(assistant)}
+                    type="button"
+                  >
+                    <div
+                      className={cn(
+                        "flex h-14 w-14 shrink-0 items-center justify-center rounded-full font-bold text-lg text-white transition-transform group-hover:scale-105",
+                        assistant.avatarColor || "bg-accent"
+                      )}
+                    >
+                      {assistant.avatar}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-semibold">{assistant.name}</h3>
+                      <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
+                        {assistant.shortDescription}
+                      </p>
+                      <p className="mt-2 text-xs text-muted-foreground">
+                        von {assistant.author}
+                      </p>
+                    </div>
+                  </button>
+                </motion.div>
+              );
+            })}
           </motion.div>
 
           {filteredAssistants.length === 0 && (

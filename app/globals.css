@@ -39,17 +39,17 @@
   --chart-3: hsl(0 0% 95%);
   --chart-4: hsl(0 0% 60%);
   --chart-5: hsl(0 0% 80%);
-  --sidebar-background: hsl(0 0% 100%);
+  --sidebar-background: hsl(0 0% 96%);
   --sidebar-foreground: hsl(0 0% 0%);
   --sidebar-primary: hsl(234 15% 12%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(82 100% 70%);
+  --sidebar-accent: hsl(0 0% 100%);
   --sidebar-accent-foreground: hsl(0 0% 0%);
   --sidebar-border: hsl(0 0% 90%);
   --sidebar-ring: hsl(82 100% 70%);
   /* border radius unit */
   --radius: 0.4375rem;
-  --sidebar: hsl(0 0% 100%);
+  --sidebar: hsl(0 0% 96%);
 }
 
 /* LED Board Bielefeld Design System - Dark Mode */
@@ -80,15 +80,15 @@
   --chart-3: hsl(234 15% 25%);
   --chart-4: hsl(0 0% 50%);
   --chart-5: hsl(0 0% 35%);
-  --sidebar-background: hsl(234 15% 10%);
+  --sidebar-background: hsl(234 15% 8%);
   --sidebar-foreground: hsl(0 0% 98%);
   --sidebar-primary: hsl(82 100% 70%);
   --sidebar-primary-foreground: hsl(0 0% 0%);
-  --sidebar-accent: hsl(234 15% 18%);
+  --sidebar-accent: hsl(234 15% 15%);
   --sidebar-accent-foreground: hsl(0 0% 98%);
-  --sidebar-border: hsl(234 15% 20%);
+  --sidebar-border: hsl(234 15% 18%);
   --sidebar-ring: hsl(82 100% 70%);
-  --sidebar: hsl(234 15% 10%);
+  --sidebar: hsl(234 15% 8%);
 }
 
 /* define theme */

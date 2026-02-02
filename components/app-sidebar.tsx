@@ -7,6 +7,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";
+import { AssistantSelector } from "@/components/assistant-selector";
 import { PlusIcon, TrashIcon } from "@/components/icons";
 import {
   getChatHistoryPaginationKey,
@@ -34,7 +35,13 @@ import {
 } from "./ui/alert-dialog";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-export function AppSidebar({ user }: { user: User | undefined }) {
+export function AppSidebar({
+  user,
+  selectedAssistantId = "general",
+}: {
+  user: User | undefined;
+  selectedAssistantId?: string;
+}) {
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
   const { mutate } = useSWRConfig();
@@ -63,61 +70,50 @@ export function AppSidebar({ user }: { user: User | undefined }) {
       <Sidebar className="group-data-[side=left]:border-r-0">
         <SidebarHeader>
           <SidebarMenu>
-            <div className="flex flex-row items-center justify-between">
-              <Link
-                className="flex flex-row items-center gap-3"
-                href="/"
-                onClick={() => {
-                  setOpenMobile(false);
-                }}
-              >
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                    <span className="font-bold text-accent-foreground text-sm">KI</span>
-                  </div>
-                  <span className="cursor-pointer font-bold text-lg">
-                    KI-Plattform
-                  </span>
-                </div>
-              </Link>
-              <div className="flex flex-row gap-1">
-                {user && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        className="h-8 p-1 md:h-fit md:p-2"
-                        onClick={() => setShowDeleteAllDialog(true)}
-                        type="button"
-                        variant="ghost"
-                      >
-                        <TrashIcon />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent align="end" className="hidden md:block">
-                      Alle Chats löschen
-                    </TooltipContent>
-                  </Tooltip>
-                )}
+            {/* Assistant Selector */}
+            <AssistantSelector selectedAssistantId={selectedAssistantId} />
+            
+            {/* Actions Row */}
+            <div className="mt-2 flex flex-row items-center justify-between px-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    className="flex-1 justify-start gap-2"
+                    onClick={() => {
+                      setOpenMobile(false);
+                      router.push("/");
+                      router.refresh();
+                    }}
+                    size="sm"
+                    type="button"
+                    variant="ghost"
+                  >
+                    <PlusIcon />
+                    <span>Neuer Chat</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent align="start" className="hidden md:block">
+                  Neuer Chat
+                </TooltipContent>
+              </Tooltip>
+              {user && (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
-                      className="h-8 p-1 md:h-fit md:p-2"
-                      onClick={() => {
-                        setOpenMobile(false);
-                        router.push("/");
-                        router.refresh();
-                      }}
+                      className="h-8 w-8 p-0"
+                      onClick={() => setShowDeleteAllDialog(true)}
+                      size="sm"
                       type="button"
                       variant="ghost"
                     >
-                      <PlusIcon />
+                      <TrashIcon />
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent align="end" className="hidden md:block">
-                    Neuer Chat
+                    Alle Chats löschen
                   </TooltipContent>
                 </Tooltip>
-              </div>
+              )}
             </div>
           </SidebarMenu>
         </SidebarHeader>

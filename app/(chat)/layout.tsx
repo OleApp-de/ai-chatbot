@@ -32,10 +32,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 async function SidebarWrapper({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const isCollapsed = cookieStore.get("sidebar_state")?.value !== "true";
+  const selectedAssistantId = cookieStore.get("selected-assistant")?.value ?? "general";
 
   return (
     <SidebarProvider defaultOpen={!isCollapsed}>
-      <AppSidebar user={mockUser} />
+      <AppSidebar selectedAssistantId={selectedAssistantId} user={mockUser} />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );

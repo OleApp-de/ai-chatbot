@@ -22,6 +22,7 @@ async function ChatPage({ params }: { params: Promise<{ id: string }> }) {
   
   const cookieStore = await cookies();
   const chatModelFromCookie = cookieStore.get("chat-model");
+  const selectedAssistantId = cookieStore.get("selected-assistant")?.value ?? "general";
 
   return (
     <>
@@ -32,6 +33,7 @@ async function ChatPage({ params }: { params: Promise<{ id: string }> }) {
         initialMessages={[]}
         initialVisibilityType="private"
         isReadonly={false}
+        selectedAssistantId={selectedAssistantId}
       />
       <DataStreamHandler />
     </>

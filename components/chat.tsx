@@ -20,6 +20,7 @@ import {
 import { useArtifactSelector } from "@/hooks/use-artifact";
 import { useAutoResume } from "@/hooks/use-auto-resume";
 import { useChatVisibility } from "@/hooks/use-chat-visibility";
+import { type Assistant, getAssistantById, getDefaultAssistant } from "@/lib/assistants";
 import type { Vote } from "@/lib/db/schema";
 import { ChatSDKError } from "@/lib/errors";
 import type { Attachment, ChatMessage } from "@/lib/types";
@@ -39,6 +40,7 @@ export function Chat({
   initialVisibilityType,
   isReadonly,
   autoResume,
+  selectedAssistantId,
 }: {
   id: string;
   initialMessages: ChatMessage[];
@@ -46,7 +48,11 @@ export function Chat({
   initialVisibilityType: VisibilityType;
   isReadonly: boolean;
   autoResume: boolean;
+  selectedAssistantId?: string;
 }) {
+  const assistant = selectedAssistantId
+    ? getAssistantById(selectedAssistantId) ?? getDefaultAssistant()
+    : getDefaultAssistant();
   const router = useRouter();
 
   const { visibilityType } = useChatVisibility({
@@ -196,6 +202,7 @@ export function Chat({
 
         <Messages
           addToolApprovalResponse={addToolApprovalResponse}
+          assistant={assistant}
           chatId={id}
           isArtifactVisible={isArtifactVisible}
           isReadonly={isReadonly}
@@ -210,6 +217,7 @@ export function Chat({
         <div className="sticky bottom-0 z-1 mx-auto flex w-full max-w-4xl gap-2 border-t-0 bg-background px-2 pb-3 md:px-4 md:pb-4">
           {!isReadonly && (
             <MultimodalInput
+              assistant={assistant}
               attachments={attachments}
               chatId={id}
               input={input}

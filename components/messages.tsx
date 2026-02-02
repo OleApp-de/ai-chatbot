@@ -1,6 +1,7 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { ArrowDownIcon } from "lucide-react";
 import { useMessages } from "@/hooks/use-messages";
+import type { Assistant } from "@/lib/assistants";
 import type { Vote } from "@/lib/db/schema";
 import type { ChatMessage } from "@/lib/types";
 import { useDataStream } from "./data-stream-provider";
@@ -18,6 +19,7 @@ type MessagesProps = {
   isReadonly: boolean;
   isArtifactVisible: boolean;
   selectedModelId: string;
+  assistant?: Assistant;
 };
 
 function PureMessages({
@@ -30,6 +32,7 @@ function PureMessages({
   regenerate,
   isReadonly,
   selectedModelId: _selectedModelId,
+  assistant,
 }: MessagesProps) {
   const {
     containerRef: messagesContainerRef,
@@ -52,7 +55,7 @@ function PureMessages({
         <div className="mx-auto flex min-w-0 max-w-4xl flex-col gap-4 px-2 py-4 md:gap-6 md:px-4">
           {messages.length === 0 && (
             <div className="flex flex-1 flex-col items-center justify-center pb-20">
-              <Greeting />
+              <Greeting assistant={assistant} />
             </div>
           )}
 

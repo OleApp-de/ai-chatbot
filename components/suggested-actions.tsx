@@ -3,6 +3,7 @@
 import type { UseChatHelpers } from "@ai-sdk/react";
 import { motion } from "framer-motion";
 import { memo } from "react";
+import { type Assistant, getDefaultAssistant } from "@/lib/assistants";
 import type { ChatMessage } from "@/lib/types";
 import type { VisibilityType } from "./visibility-selector";
 
@@ -10,27 +11,12 @@ type SuggestedActionsProps = {
   chatId: string;
   sendMessage: UseChatHelpers<ChatMessage>["sendMessage"];
   selectedVisibilityType: VisibilityType;
+  assistant?: Assistant;
 };
 
-function PureSuggestedActions({ chatId, sendMessage }: SuggestedActionsProps) {
-  const suggestedActions = [
-    {
-      title: "Was kannst du alles?",
-      description: "Erfahre mehr über meine Fähigkeiten",
-    },
-    {
-      title: "Hilf mir bei einem Projekt",
-      description: "Kreative oder technische Unterstützung",
-    },
-    {
-      title: "Erkläre ein Thema",
-      description: "Komplexe Sachverhalte einfach verstehen",
-    },
-    {
-      title: "Schreibe einen Text",
-      description: "E-Mails, Artikel oder andere Inhalte",
-    },
-  ];
+function PureSuggestedActions({ chatId, sendMessage, assistant }: SuggestedActionsProps) {
+  const currentAssistant = assistant ?? getDefaultAssistant();
+  const suggestedActions = currentAssistant.suggestedActions;
 
   return (
     <div
@@ -71,6 +57,9 @@ export const SuggestedActions = memo(
       return false;
     }
     if (prevProps.selectedVisibilityType !== nextProps.selectedVisibilityType) {
+      return false;
+    }
+    if (prevProps.assistant?.id !== nextProps.assistant?.id) {
       return false;
     }
 

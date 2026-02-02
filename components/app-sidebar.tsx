@@ -73,10 +73,10 @@ export function AppSidebar({ user }: { user: User | undefined }) {
               >
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                    <span className="font-bold text-accent-foreground text-sm">LB</span>
+                    <span className="font-bold text-accent-foreground text-sm">KI</span>
                   </div>
                   <span className="cursor-pointer font-bold text-lg">
-                    LED Board
+                    KI-Plattform
                   </span>
                 </div>
               </Link>

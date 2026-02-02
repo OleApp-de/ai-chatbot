@@ -7,8 +7,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://chat.vercel.ai"),
-  title: "LED Board Bielefeld - AI Chat",
-  description: "LED Board Bielefeld AI-powered assistant.",
+  title: "KI-Plattform",
+  description: "Ihre intelligente KI-Plattform.",
 };
 
 export const viewport = {
@@ -21,7 +21,7 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
 });
 
-// LED Board Bielefeld theme colors
+// KI-Plattform theme colors
 const LIGHT_THEME_COLOR = "#FFFFFF";
 const DARK_THEME_COLOR = "#191A23";
 const THEME_COLOR_SCRIPT = `\

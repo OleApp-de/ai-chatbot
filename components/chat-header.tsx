@@ -51,7 +51,7 @@ function PureChatHeader({
 
       <div className="order-3 hidden md:ml-auto md:flex items-center gap-2">
         <div className="inline-block bg-accent rounded-full px-3 py-1">
-          <span className="text-xs font-medium text-accent-foreground">LED Board Bielefeld</span>
+          <span className="text-xs font-medium text-accent-foreground">KI-Plattform</span>
         </div>
       </div>
     </header>

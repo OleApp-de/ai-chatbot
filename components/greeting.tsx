@@ -12,7 +12,7 @@ export const Greeting = () => {
         initial={{ opacity: 0, scale: 0.8 }}
         transition={{ delay: 0.3 }}
       >
-        <span className="font-bold text-2xl text-accent-foreground">LB</span>
+        <span className="font-bold text-2xl text-accent-foreground">KI</span>
       </motion.div>
       <motion.div
         animate={{ opacity: 1, y: 0 }}
@@ -21,7 +21,7 @@ export const Greeting = () => {
         initial={{ opacity: 0, y: 10 }}
         transition={{ delay: 0.5 }}
       >
-        Willkommen bei LED Board Bielefeld
+        Willkommen bei der KI-Plattform
       </motion.div>
       <motion.div
         animate={{ opacity: 1, y: 0 }}

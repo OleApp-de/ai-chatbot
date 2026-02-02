@@ -15,10 +15,10 @@ type SuggestedActionsProps = {
 
 function PureSuggestedActions({ chatId, sendMessage }: SuggestedActionsProps) {
   const suggestedActions = [
-    "Welche Werbeflächen bietet LED Board Bielefeld an?",
-    "Was kostet eine Werbekampagne auf einem LED Board?",
-    "Wie kann ich eine Werbebuchung starten?",
-    "Welche Formate werden für LED-Werbung unterstützt?",
+    "Was kann diese KI-Plattform alles?",
+    "Hilf mir bei einem kreativen Projekt",
+    "Erkläre mir ein komplexes Thema",
+    "Schreibe mir einen Text",
   ];
 
   return (

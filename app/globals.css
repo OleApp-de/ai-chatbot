@@ -11,86 +11,90 @@
 @plugin "tailwindcss-animate";
 @plugin "@tailwindcss/typography";
 
-/* define design tokens (light mode) */
+/* LED Board Bielefeld Design System - Light Mode */
 :root {
+  /* Primary: #191A23 - Dark gray/almost black */
   --background: hsl(0 0% 100%);
-  --foreground: hsl(240 10% 3.9%);
+  --foreground: hsl(0 0% 0%);
   --card: hsl(0 0% 100%);
-  --card-foreground: hsl(240 10% 3.9%);
+  --card-foreground: hsl(0 0% 0%);
   --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(240 10% 3.9%);
-  --primary: hsl(240 5.9% 10%);
-  --primary-foreground: hsl(0 0% 98%);
-  --secondary: hsl(240 4.8% 95.9%);
-  --secondary-foreground: hsl(240 5.9% 10%);
-  --muted: hsl(240 4.8% 95.9%);
-  --muted-foreground: hsl(240 3.8% 46.1%);
-  --accent: hsl(240 4.8% 95.9%);
-  --accent-foreground: hsl(240 5.9% 10%);
+  --popover-foreground: hsl(0 0% 0%);
+  --primary: hsl(234 15% 12%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(0 0% 95%);
+  --secondary-foreground: hsl(0 0% 0%);
+  --muted: hsl(0 0% 95%);
+  --muted-foreground: hsl(0 0% 40%);
+  /* Accent: #B9FF66 - Neon green */
+  --accent: hsl(82 100% 70%);
+  --accent-foreground: hsl(0 0% 0%);
   --destructive: hsl(0 84.2% 60.2%);
   --destructive-foreground: hsl(0 0% 98%);
-  --border: hsl(240 5.9% 90%);
-  --input: hsl(240 5.9% 90%);
-  --ring: hsl(240 10% 3.9%);
-  --chart-1: hsl(12 76% 61%);
-  --chart-2: hsl(173 58% 39%);
-  --chart-3: hsl(197 37% 24%);
-  --chart-4: hsl(43 74% 66%);
-  --chart-5: hsl(27 87% 67%);
-  --sidebar-background: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(240 5.3% 26.1%);
-  --sidebar-primary: hsl(240 5.9% 10%);
-  --sidebar-primary-foreground: hsl(0 0% 98%);
-  --sidebar-accent: hsl(240 4.8% 95.9%);
-  --sidebar-accent-foreground: hsl(240 5.9% 10%);
-  --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+  --border: hsl(234 15% 12%);
+  --input: hsl(0 0% 95%);
+  --ring: hsl(82 100% 70%);
+  --chart-1: hsl(82 100% 70%);
+  --chart-2: hsl(234 15% 12%);
+  --chart-3: hsl(0 0% 95%);
+  --chart-4: hsl(0 0% 60%);
+  --chart-5: hsl(0 0% 80%);
+  --sidebar-background: hsl(0 0% 100%);
+  --sidebar-foreground: hsl(0 0% 0%);
+  --sidebar-primary: hsl(234 15% 12%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(82 100% 70%);
+  --sidebar-accent-foreground: hsl(0 0% 0%);
+  --sidebar-border: hsl(0 0% 90%);
+  --sidebar-ring: hsl(82 100% 70%);
   /* border radius unit */
-  --radius: 0.5rem;
-  --sidebar: hsl(0 0% 98%);
+  --radius: 0.4375rem;
+  --sidebar: hsl(0 0% 100%);
 }
 
-/* define design tokens (dark mode) */
+/* LED Board Bielefeld Design System - Dark Mode */
 .dark {
-  --background: hsl(240 10% 3.9%);
+  /* Inverted: Primary becomes background */
+  --background: hsl(234 15% 12%);
   --foreground: hsl(0 0% 98%);
-  --card: hsl(240 10% 3.9%);
+  --card: hsl(234 15% 15%);
   --card-foreground: hsl(0 0% 98%);
-  --popover: hsl(240 10% 3.9%);
+  --popover: hsl(234 15% 15%);
   --popover-foreground: hsl(0 0% 98%);
   --primary: hsl(0 0% 98%);
-  --primary-foreground: hsl(240 5.9% 10%);
-  --secondary: hsl(240 3.7% 15.9%);
+  --primary-foreground: hsl(234 15% 12%);
+  --secondary: hsl(234 15% 18%);
   --secondary-foreground: hsl(0 0% 98%);
-  --muted: hsl(240 3.7% 15.9%);
-  --muted-foreground: hsl(240 5% 64.9%);
-  --accent: hsl(240 3.7% 15.9%);
-  --accent-foreground: hsl(0 0% 98%);
+  --muted: hsl(234 15% 18%);
+  --muted-foreground: hsl(0 0% 65%);
+  /* Accent stays the same: #B9FF66 */
+  --accent: hsl(82 100% 70%);
+  --accent-foreground: hsl(0 0% 0%);
   --destructive: hsl(0 62.8% 30.6%);
   --destructive-foreground: hsl(0 0% 98%);
-  --border: hsl(240 3.7% 15.9%);
-  --input: hsl(240 3.7% 15.9%);
-  --ring: hsl(240 4.9% 83.9%);
-  --chart-1: hsl(220 70% 50%);
-  --chart-2: hsl(160 60% 45%);
-  --chart-3: hsl(30 80% 55%);
-  --chart-4: hsl(280 65% 60%);
-  --chart-5: hsl(340 75% 55%);
-  --sidebar-background: hsl(240 5.9% 10%);
-  --sidebar-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-primary: hsl(224.3 76.3% 48%);
-  --sidebar-primary-foreground: hsl(0 0% 100%);
-  --sidebar-accent: hsl(240 3.7% 15.9%);
-  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
-  --sidebar-border: hsl(240 3.7% 15.9%);
-  --sidebar-ring: hsl(217.2 91.2% 59.8%);
-  --sidebar: hsl(240 5.9% 10%);
+  --border: hsl(234 15% 25%);
+  --input: hsl(234 15% 18%);
+  --ring: hsl(82 100% 70%);
+  --chart-1: hsl(82 100% 70%);
+  --chart-2: hsl(0 0% 98%);
+  --chart-3: hsl(234 15% 25%);
+  --chart-4: hsl(0 0% 50%);
+  --chart-5: hsl(0 0% 35%);
+  --sidebar-background: hsl(234 15% 10%);
+  --sidebar-foreground: hsl(0 0% 98%);
+  --sidebar-primary: hsl(82 100% 70%);
+  --sidebar-primary-foreground: hsl(0 0% 0%);
+  --sidebar-accent: hsl(234 15% 18%);
+  --sidebar-accent-foreground: hsl(0 0% 98%);
+  --sidebar-border: hsl(234 15% 20%);
+  --sidebar-ring: hsl(82 100% 70%);
+  --sidebar: hsl(234 15% 10%);
 }
 
 /* define theme */
 @theme {
-  --font-sans: var(--font-geist);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-space-grotesk), 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-space-grotesk), 'Space Grotesk', ui-monospace, monospace;
 
   --breakpoint-toast-mobile: 600px;
 

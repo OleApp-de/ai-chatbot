@@ -4,7 +4,6 @@ import type { UseChatHelpers } from "@ai-sdk/react";
 import { motion } from "framer-motion";
 import { memo } from "react";
 import type { ChatMessage } from "@/lib/types";
-import { Suggestion } from "./elements/suggestion";
 import type { VisibilityType } from "./visibility-selector";
 
 type SuggestedActionsProps = {
@@ -15,10 +14,22 @@ type SuggestedActionsProps = {
 
 function PureSuggestedActions({ chatId, sendMessage }: SuggestedActionsProps) {
   const suggestedActions = [
-    "Was kann diese KI-Plattform alles?",
-    "Hilf mir bei einem kreativen Projekt",
-    "Erkläre mir ein komplexes Thema",
-    "Schreibe mir einen Text",
+    {
+      title: "Was kannst du alles?",
+      description: "Erfahre mehr über meine Fähigkeiten",
+    },
+    {
+      title: "Hilf mir bei einem Projekt",
+      description: "Kreative oder technische Unterstützung",
+    },
+    {
+      title: "Erkläre ein Thema",
+      description: "Komplexe Sachverhalte einfach verstehen",
+    },
+    {
+      title: "Schreibe einen Text",
+      description: "E-Mails, Artikel oder andere Inhalte",
+    },
   ];
 
   return (
@@ -26,28 +37,28 @@ function PureSuggestedActions({ chatId, sendMessage }: SuggestedActionsProps) {
       className="grid w-full gap-2 sm:grid-cols-2"
       data-testid="suggested-actions"
     >
-      {suggestedActions.map((suggestedAction, index) => (
-        <motion.div
+      {suggestedActions.map((action, index) => (
+        <motion.button
           animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-start gap-1 rounded-lg border border-border bg-card p-3 text-left transition-colors hover:bg-muted"
           exit={{ opacity: 0, y: 20 }}
           initial={{ opacity: 0, y: 20 }}
-          key={suggestedAction}
+          key={action.title}
+          onClick={() => {
+            window.history.pushState({}, "", `/chat/${chatId}`);
+            sendMessage({
+              role: "user",
+              parts: [{ type: "text", text: action.title }],
+            });
+          }}
           transition={{ delay: 0.05 * index }}
+          type="button"
         >
-          <Suggestion
-            className="h-auto w-full whitespace-normal p-3 text-left"
-            onClick={(suggestion) => {
-              window.history.pushState({}, "", `/chat/${chatId}`);
-              sendMessage({
-                role: "user",
-                parts: [{ type: "text", text: suggestion }],
-              });
-            }}
-            suggestion={suggestedAction}
-          >
-            {suggestedAction}
-          </Suggestion>
-        </motion.div>
+          <span className="font-medium text-sm">{action.title}</span>
+          <span className="text-xs text-muted-foreground line-clamp-2">
+            {action.description}
+          </span>
+        </motion.button>
       ))}
     </div>
   );
